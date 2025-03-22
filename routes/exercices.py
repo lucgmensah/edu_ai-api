@@ -18,7 +18,8 @@ def get_exercices(
     type_exercice_id: int = None,
     db: Session = Depends(get_db)
 ):
-    query = db.query(Exercice)
+    user = get_current_active_user()
+    query = db.query(Exercice).filter(Exercice.createur_id == user.id)
     
     if thematique_id:
         query = query.filter(Exercice.thematique_id == thematique_id)
@@ -35,7 +36,7 @@ def create_exercice(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_active_user)
 ):
-    db_exercice = Exercice(**exercice.dict())
+    db_exercice = Exercice(**exercice.dict(), createur_id=current_user.id)
     db.add(db_exercice)
     db.commit()
     db.refresh(db_exercice)

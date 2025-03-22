@@ -14,3 +14,4 @@ class Utilisateur(Base):
     is_active = Column(Boolean, default=True)
     
     tentatives = relationship("Tentative", back_populates="utilisateur")
+    exercices_crees = relationship("Exercice", back_populates="createur")

@@ -13,8 +13,10 @@ class Exercice(Base):
     duree_estimee = Column(Integer)  # en minutes
     thematique_id = Column(Integer, ForeignKey("thematiques.id"))
     type_exercice_id = Column(Integer, ForeignKey("types_exercice.id"))
+    createur_id = Column(Integer, ForeignKey("utilisateurs.id"))
     
     thematique = relationship("Thematique", back_populates="exercices")
     type_exercice = relationship("TypeExercice", back_populates="exercices")
     questions = relationship("Question", back_populates="exercice")
     tentatives = relationship("Tentative", back_populates="exercice")
+    createur = relationship("Utilisateur", back_populates="exercices_crees")

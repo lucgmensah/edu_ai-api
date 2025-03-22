@@ -11,6 +11,7 @@ class ExerciceBase(BaseModel):
     duree_estimee: int
     thematique_id: int
     type_exercice_id: int
+    createur_id: int
 
 class ExerciceCreate(ExerciceBase):
     pass
