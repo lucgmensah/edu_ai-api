@@ -16,9 +16,9 @@ def get_exercices(
     limit: int = 100, 
     thematique_id: int = None,
     type_exercice_id: int = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_active_user)
 ):
-    user = get_current_active_user()
     query = db.query(Exercice).filter(Exercice.createur_id == user.id)
     
     if thematique_id:

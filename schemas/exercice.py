@@ -11,7 +11,7 @@ class ExerciceBase(BaseModel):
     duree_estimee: int
     thematique_id: int
     type_exercice_id: int
-    createur_id: int
+    # createur_id: int
 
 class ExerciceCreate(ExerciceBase):
     pass
@@ -20,6 +20,7 @@ class Exercice(ExerciceBase):
     id: int
     thematique: Optional[Thematique] = None
     type_exercice: Optional[TypeExercice] = None
+    createur_id: int
 
     class Config:
         orm_mode = True
