@@ -171,3 +171,15 @@ cython_debug/
 .pypirc
 
 app.db
+
+# Fichiers générés par Alembic
+alembic/versions/*.pyc
+alembic/versions/*.pyo
+alembic/versions/__pycache__/
+
+# Fichiers temporaires et de cache
+*.pyc
+*.pyo
+__pycache__/
+.DS_Store
+.vscode/
