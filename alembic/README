@@ -1,0 +1,60 @@
+Generic single-database configuration.
+## Utilisation de Alembic dans ce projet
+
+### Installation
+
+Pour installer Alembic, vous pouvez utiliser pip :
+
+```bash
+pip install alembic
+```
+
+### Configuration
+
+Initialisez Alembic dans votre projet :
+
+```bash
+alembic init alembic
+```
+
+Cela créera un répertoire `alembic` avec les fichiers de configuration nécessaires.
+
+### Configuration de la base de données
+
+Modifiez le fichier `alembic.ini` pour configurer la connexion à votre base de données. Par exemple :
+
+```ini
+sqlalchemy.url = postgresql://user:password@localhost/dbname
+```
+
+### Création d'une migration
+
+Pour créer une nouvelle migration, utilisez la commande suivante :
+
+```bash
+alembic revision --autogenerate -m "Description de la migration"
+```
+
+### Application des migrations
+
+Pour appliquer les migrations à la base de données, utilisez la commande suivante :
+
+```bash
+alembic upgrade head
+```
+
+### Revenir à une migration précédente
+
+Pour revenir à une migration précédente, utilisez la commande suivante :
+
+```bash
+alembic downgrade -1
+```
+
+### Commandes utiles
+
+- `alembic current` : Affiche la version actuelle de la base de données.
+- `alembic history` : Affiche l'historique des migrations.
+- `alembic heads` : Affiche les migrations non fusionnées.
+
+Pour plus d'informations, consultez la [documentation officielle d'Alembic](https://alembic.sqlalchemy.org/en/latest/).
