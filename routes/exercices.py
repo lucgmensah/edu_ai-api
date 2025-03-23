@@ -6,6 +6,7 @@ from typing import List
 from database import get_db
 from models.exercice import Exercice
 from schemas.exercice import ExerciceCreate, Exercice as ExerciceSchema
+from models.tentative import Tentative
 from core.security import get_current_active_user
 
 router = APIRouter()
@@ -19,7 +20,7 @@ def get_exercices(
     db: Session = Depends(get_db),
     user: dict = Depends(get_current_active_user)
 ):
-    query = db.query(Exercice).filter(Exercice.createur_id == user.id)
+    query = db.query(Exercice).join(Tentative).filter(Tentative.utilisateur_id == user.id)
     
     if thematique_id:
         query = query.filter(Exercice.thematique_id == thematique_id)

@@ -4,7 +4,6 @@ from typing import List, Optional
 from datetime import datetime
 
 class TentativeBase(BaseModel):
-    utilisateur_id: int
     exercice_id: int
 
 class TentativeCreate(TentativeBase):

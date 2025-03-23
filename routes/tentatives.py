@@ -29,14 +29,7 @@ def create_tentative(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_active_user)
 ):
-    # Vérifier que l'utilisateur crée une tentative pour lui-même
-    if tentative.utilisateur_id != current_user.id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Vous ne pouvez créer une tentative que pour vous-même"
-        )
-    
-    db_tentative = Tentative(**tentative.dict())
+    db_tentative = Tentative(**tentative.dict(), utilisateur_id=current_user.id)
     db.add(db_tentative)
     db.commit()
     db.refresh(db_tentative)
