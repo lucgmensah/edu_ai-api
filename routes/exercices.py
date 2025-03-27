@@ -4,7 +4,10 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db
+from models.correction import Correction
 from models.exercice import Exercice
+from models.question import Question
+from rag import rag
 from schemas.exercice import ExerciceCreate, Exercice as ExerciceSchema
 from models.tentative import Tentative
 from core.security import get_current_active_user
@@ -41,6 +44,16 @@ def create_exercice(
     db.add(db_exercice)
     db.commit()
     db.refresh(db_exercice)
+    
+    questions = rag.generate_questions(db_exercice.type_exercice_id.nom, db_exercice.difficulte)
+    
+    for question in questions:
+        db_question = Question(enonce=question["question"]+" "+question["choices"], points_max=10/len(questions), exercice_id=db_exercice.id)
+        if db_exercice.type_exercice_id.nom == "QCM":
+            db_corrections = Correction(solution=question["correct"], question_id=db_question.id)
+        
+        db.add(db_question)
+    
     return db_exercice
 
 @router.get("/{exercice_id}", response_model=ExerciceSchema)
