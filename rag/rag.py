@@ -1,12 +1,16 @@
-from utils import parse_qcm_response, build_prompt, parse_analyse_response
-from langchain.chat_models import ChatOpenAI
+from .utils import parse_qcm_response, build_prompt, parse_analyse_response
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
-from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from dotenv import load_dotenv
+import os
 
-cle_api_openai = "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"
+load_dotenv()
 
-def generate_questions(question_type="QCM", theme_name="Général", level="débutant", nbre=5):
+cle_api_openai = os.getenv("OPENAI_API_KEY")
+
+def generate_questions(question_type="multiple choice questions", theme_name="Patent Law", level="entry", nbre=5):
     prompt = build_prompt(question_type, theme_name, level, nbre)
     
     # Charger la base existante
@@ -26,6 +30,8 @@ def generate_questions(question_type="QCM", theme_name="Général", level="débu
     )
 
     response = qa.run(prompt)
+    
+    print('reponse rag = ', response)
     
     if question_type == "QCM":
         questions = parse_qcm_response(response)

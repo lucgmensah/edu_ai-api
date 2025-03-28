@@ -1,31 +1,73 @@
-def build_prompt(question_type="QCM", theme="Général", level="débutant", nbre=5):
+def build_prompt(question_type="QCM", theme="Patent Law", level="entry", nbre=5):
+    # Common context to establish expertise and expectations
+    common_context = f"""
+    You are an expert law professor with extensive knowledge in legal education. 
+    Your task is to create high-quality, educational content that demonstrates 
+    deep understanding of legal concepts.
+
+    Context Details:
+    - Topic: {theme}
+    - Difficulty Level: {level}
+    - Number of Questions: {nbre}
+
+    Important Guidelines:
+    1. Ensure all content is factually accurate and academically rigorous.
+    2. Adapt the complexity to the specified difficulty level.
+    3. Focus on core legal principles and practical understanding.
+    4. Avoid overly complex or trick questions.
+    5. Provide clear, unambiguous answers.
+    """
+    
     if question_type == "QCM":
-        return f"""
-        Tu es un professeur de mathématiques.
-        Génère un QCM de {nbre} questions sur le thème "{theme}", niveau {level}.
-        
-        Ta réponse DOIT suivre strictement ce format :
-        
-        Question : Quel est le mot clé utilisé pour définir une fonction en Python ?
-        A. define
-        B. function
-        C. def
-        D. fun
-        Réponse correcte : C
+        return common_context + f"""
+        Prompt: Generate a multiple-choice quiz with {nbre} questions about {theme}.
+
+        Strict Output Format:
+        Question 1: [Clear, concise legal question]
+        A. [Precise, plausible option]
+        B. [Precise, plausible option]
+        C. [Precise, plausible option]
+        D. [Precise, plausible option]
+        Correct answer: [Single letter corresponding to the correct answer]
+
+        Example:
+        Question: What is the primary purpose of civil law?
+        A. To punish criminal behavior
+        B. To resolve disputes between individuals and entities
+        C. To create government regulations
+        D. To define international treaties
+        Correct answer: B
         """
+    
     elif question_type == "Analyse":
-        return f"""
-        Tu es un enseignant.
-        
-        En te basant sur le thème "{theme}", niveau {level}, génère {nbre} exercices.
-        
-        Génère une question ouverte de type analyse. Formate ta réponse comme ceci :
-        
-        Question : ...
-        Consignes : ...
+        return common_context + f"""
+        Prompt: Create {nbre} in-depth analysis exercises about {theme}.
+
+        Detailed Exercise Format:
+        Question: [Thought-provoking legal scenario or conceptual challenge]
+        Context: [Brief background providing necessary information]
+        Instructions: 
+        1. [First analytical step]
+        2. [Second analytical step]
+        3. [Additional guidance for comprehensive analysis]
+
+        Evaluation Criteria:
+        - Clarity of legal reasoning
+        - Depth of analysis
+        - Use of relevant legal principles
+        - Coherence of argumentation
+
+        Example:
+        Question: Analyze the ethical and legal implications of a corporate whistleblower's actions.
+        Context: A mid-level manager discovers systematic financial fraud within her company.
+        Instructions:
+        1. Identify the legal protections available to whistleblowers
+        2. Evaluate the potential personal and professional risks
+        3. Discuss the broader societal impact of whistleblowing
         """
+    
     else:
-        raise ValueError("Type de question non reconnu.")
+        raise ValueError("Unrecognized question type. Must be 'QCM' or 'Analyse'.")
 
 
 def parse_qcm_response(response_text):
