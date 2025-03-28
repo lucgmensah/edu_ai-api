@@ -2,6 +2,14 @@
 from pydantic import BaseModel
 from typing import Optional
 
+class OptionSchema(BaseModel):
+    id: int
+    option: str
+    question_id: int
+
+    class Config:
+        orm_mode = True
+
 class QuestionBase(BaseModel):
     enonce: str
     points_max: int
@@ -12,6 +20,7 @@ class QuestionCreate(QuestionBase):
 
 class Question(QuestionBase):
     id: int
+    options: Optional[list[OptionSchema]] = []
 
     class Config:
         orm_mode = True

@@ -6,7 +6,9 @@ from typing import List
 from database import get_db
 from models.correction import Correction
 from models.exercice import Exercice
+from models.option import Option
 from models.question import Question
+from models.type_exercice import TypeExercice  # Import the Type_Exercice model
 from rag import rag
 from schemas.exercice import ExerciceCreate, Exercice as ExerciceSchema
 from models.tentative import Tentative
@@ -45,14 +47,32 @@ def create_exercice(
     db.commit()
     db.refresh(db_exercice)
     
-    questions = rag.generate_questions(db_exercice.type_exercice_id.nom, db_exercice.difficulte)
+    type = db.query(TypeExercice).filter(TypeExercice.id == db_exercice.type_exercice_id).first()
+    
+    questions = rag.generate_questions(type.nom, db_exercice.thematique.nom, db_exercice.difficulte, 5)
+    
+    print(questions)
     
     for question in questions:
-        db_question = Question(enonce=question["question"]+" "+question["choices"], points_max=10/len(questions), exercice_id=db_exercice.id)
-        if db_exercice.type_exercice_id.nom == "QCM":
-            db_corrections = Correction(solution=question["correct"], question_id=db_question.id)
-        
+        print(question["question"])
+        db_question = Question(enonce=question["question"], points_max=10/len(questions), exercice_id=db_exercice.id)
         db.add(db_question)
+        db.commit()
+        db.refresh(db_question)
+
+        if type.nom == "QCM":
+            for key, option in question["choices"].items():
+                print(option)
+                db_option = Option(option=option, question_id=db_question.id)
+                db.add(db_option)
+                db.commit()
+                db.refresh(db_option)
+                
+            print(question["correct"])
+            db_corrections = Correction(solution=question["correct"], question_id=db_question.id)
+            db.add(db_corrections)
+            db.commit()
+            db.refresh(db_corrections)
     
     return db_exercice
 
